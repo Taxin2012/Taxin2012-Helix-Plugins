@@ -1,6 +1,6 @@
 
 local PLUGIN = PLUGIN
-PLUGIN.name = "Door Saver"
+PLUGIN.name = "Doors Saver"
 PLUGIN.author = "Taxin2012"
 PLUGIN.description = "Saves purchased by players doors."
 
