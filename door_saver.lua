@@ -2,7 +2,7 @@
 local PLUGIN = PLUGIN
 PLUGIN.name = "Door Saver"
 PLUGIN.author = "Taxin2012"
-PLUGIN.description = ""
+PLUGIN.description = "Saves purchased by players doors."
 
 PLUGIN.DOORS_BUFFER = PLUGIN.DOORS_BUFFER or {}
 PLUGIN.DOORS_ACCESS_BUFFER = PLUGIN.DOORS_ACCESS_BUFFER or {}
