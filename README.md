@@ -2,4 +2,4 @@
 Plugins for Helix writed by me.
 
 
-Door's Saves - saves purchased by players doors.
+Door's Saves - saves purchased by players doors. Protected for lua-reload.
