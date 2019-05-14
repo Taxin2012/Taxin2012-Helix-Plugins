@@ -16,29 +16,21 @@ if SERVER then
 		end
 	end
 
-	function PLUGIN:PlayerLoadedCharacter( ply, char, currChar )
-		local char = ply:GetCharacter()
-		if char then
-			local class = currChar:GetData( "pclass" )
+	function PLUGIN:PlayerLoadedCharacter( ply, curChar, prevChar )
+		local data = curChar:GetData( "pclass" )
+		if data then
+			local class = ix.class.list[ data ]
 			if class then
-				local classTable
+				local oldClass = curChar:GetClass()
 
-				for _, v in ipairs( ix.class.list ) do
-					if ( ix.util.StringMatches( v.uniqueID, class ) or ix.util.StringMatches( v.name, class ) ) then
-						classTable = v
-					end
-				end
-
-				if classTable then
-					local oldClass = char:GetClass()
-
-					if ply:Team() == classTable.faction then
-						char:SetClass( classTable.index )
+				if ply:Team() == class.faction then
+					timer.Simple( .1, function()
+						curChar:SetClass( class.index )
 
 						if ix.config.Get( "runClassHook" ) then
-							hook.Run( "PlayerJoinedClass", ply, classTable.index, oldClass )
+							hook.Run( "PlayerJoinedClass", ply, class.index, oldClass )
 						end
-					end
+					end )
 				end
 			end
 		end
