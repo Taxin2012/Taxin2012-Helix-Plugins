@@ -31,9 +31,8 @@ if SERVER then
 
 				if classTable then
 					local oldClass = char:GetClass()
-					local targetPlayer = char:GetPlayer()
 
-					if targetPlayer:Team() == classTable.faction then
+					if ply:Team() == classTable.faction then
 						char:SetClass( classTable.index )
 
 						if ix.config.Get( "runClassHook" ) then
