@@ -4,7 +4,7 @@ PLUGIN.name = "Perma Class"
 PLUGIN.author = "Taxin2012"
 PLUGIN.description = "Makes class permanent."
 
-ix.config.Add( "runClassHook", true, "Should plugin run PlayerJoinedClass hook?", nil, {
+ix.config.Add( "runClassHook", false, "Should plugin run PlayerJoinedClass hook?", nil, {
 	category = "Perma Class"
 } )
 
