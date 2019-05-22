@@ -27,7 +27,7 @@ if SERVER then
 					timer.Simple( .3, function()
 						curChar:SetClass( class.index )
 
-						if ix.config.Get( "runClassHook" ) then
+						if ix.config.Get( "runClassHook", false ) then
 							hook.Run( "PlayerJoinedClass", ply, class.index, oldClass )
 						end
 					end )
