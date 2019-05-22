@@ -24,7 +24,7 @@ if SERVER then
 				local oldClass = curChar:GetClass()
 
 				if ply:Team() == class.faction then
-					timer.Simple( .1, function()
+					timer.Simple( .3, function()
 						curChar:SetClass( class.index )
 
 						if ix.config.Get( "runClassHook" ) then
