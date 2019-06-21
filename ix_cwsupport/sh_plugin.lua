@@ -24,7 +24,6 @@ ix.util.Include("sh_attachments.lua")
 function PLUGIN:InitializedPlugins()
 	--table.Merge(ix.lang.stored["korean"], self.koreanTranslation)
 	table.Merge(ix.lang.stored["english"], self.englishTranslation)
-	table.Merge(ix.lang.stored["russian"], self.russianTranslation) -- By Taxin2012
 
 	-- Create Items with Lua
 	do
@@ -444,12 +443,9 @@ function PLUGIN:InitializedPlugins()
 
 				-- Register Language name for the gun.
 				if (CLIENT) then
-					if (ix.lang.stored["russian"]) then --and ix.lang.stored["korean"] ix.lang.stored["english"]
+					if (ix.lang.stored["english"]) then
 						ITEM.name = v.PrintName 
-						
 						ix.lang.stored["english"][prefix .. uniqueID] = v.PrintName 
-						--ix.lang.stored["korean"][prefix .. uniqueID] = v.PrintName 
-						ix.lang.stored["russian"][prefix .. uniqueID] = v.PrintName -- By Taxin2012
 					end
 				end
 			end
