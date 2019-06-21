@@ -8,5 +8,5 @@ Perma Class - makes players classes permanent.
 
 IX CW Support - ported from NS CW Support plugin.  
 [NetStream](https://github.com/NebulousCloud/helix-hl2rp/blob/master/schema/libs/thirdparty/sh_netstream2.lua) is required!  
-This plugin also using Russian language, but you can easily translate to English, by using [original plugin](https://github.com/rebel1324/BlackTea-Nutscript-Plugins/tree/master/cwsupport).
+This plugin also using Russian language, but you can easily translate to English, by using [original plugin](https://github.com/rebel1324/BlackTea-Nutscript-Plugins/tree/master/cwsupport).  
 Holstering is working not properly!!!
