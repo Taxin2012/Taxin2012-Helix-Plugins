@@ -28,7 +28,9 @@ PLUGIN.GunData[ "tfa_ins2_ak74m" ] = {
 	Height = 2,
 	Weight = 3,
 	Price = 2000,
-
+	
+	--Weapon Parameters
+	--Prim == Primary
 	Prim = {
 		Ammo = "assault",
 		Damage = 31,
@@ -38,4 +40,7 @@ PLUGIN.GunData[ "tfa_ins2_ak74m" ] = {
 		Spread = .021,
 		IronAccuracy = .01
 	}
+	
+	--Prim == Secondary
+	Sec = {}
 }
