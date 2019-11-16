@@ -12,3 +12,6 @@ This plugin also using Russian language, but you can easily translate to English
 Holstering is working not properly!!!
 
 TFA Support - writed by me plugin that add fully support TFA weapons pack.
+"sh_tfa_ammo.lua" - Here you can add ammo ( and new ammo types ).
+"sh_tfa_weps.lua" - Here you can edit weapon stats.
+"sh_tfa_attach.lua" - Here you can add attachments.
