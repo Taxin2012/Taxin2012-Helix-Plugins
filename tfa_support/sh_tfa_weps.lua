@@ -41,6 +41,6 @@ PLUGIN.GunData[ "tfa_ins2_ak74m" ] = {
 		IronAccuracy = .01
 	}
 	
-	--Prim == Secondary
+	--Sec == Secondary
 	Sec = {}
 }
