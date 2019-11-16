@@ -51,15 +51,17 @@ if CLIENT then
 			local text = "Modifications: "
 
 			local mods = item:GetData( "mods", {} )
+			local already = {}
 
 			if not table.IsEmpty( mods ) then
 				for k, v in next, mods do
+					already[ v ] = true
 					text = text .. "\n  +" .. ( ( ix.item.list[ v ] and ix.item.list[ v ].name ) or v )
 				end
 			end
 
 			for k, v in next, item.Attachments do
-				if not mods[ k ] then
+				if not already[ k ] then
 					local att = ix.item.list[ k ]
 					if att then
 						text = text .. "\n  -" .. att.name
