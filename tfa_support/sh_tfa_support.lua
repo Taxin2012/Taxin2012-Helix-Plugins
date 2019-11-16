@@ -35,18 +35,6 @@ ix.util.Include("sh_tfa_ammo.lua")
 
 if CLIENT then
 	function PLUGIN:PopulateItemTooltip( tooltip, item )
-		local dur = item:GetData( "durability" )
-		if dur then
-			local row = tooltip:AddRowAfter( "name", "durability" )
-			if dur <= 100 then
-				row:SetText( "Durability: " .. dur .. "/100" )
-			elseif dur > 100 then
-				row:SetText( "Durability: " .. dur .. "/250" )
-			end
-			row:SetBackgroundColor( derma.GetColor( "Info", tooltip ) )
-			row:SizeToContents()
-		end
-
 		if item.Attachments and not table.IsEmpty( item.Attachments ) then
 			local text = "Modifications: "
 
@@ -185,16 +173,6 @@ function PLUGIN:InitializedPlugins()
 
 					x = x - 8 * 1.6
 				end
-
-				if item:GetData( "durability" ) then
-					local tex = tostring( item:GetData( "durability" ) )
-
-					surface.SetFont( "ixChatFont" )
-					local wi, he = surface.GetTextSize( tex )
-					surface.SetTextColor( 255, 255, 255, 255 )
-					surface.SetTextPos( w - ( 14 + wi ), 14 )
-					surface.DrawText( tex )
-				end
 			end
 
 			function ITEM:GetDescription()
@@ -209,48 +187,11 @@ function PLUGIN:InitializedPlugins()
 			end
 
 			function ITEM:OnInstanced()
-				if self:GetData( "durability" ) == nil then
-					self:SetData( "durability", 100 )
-				end
-
 				if self:GetData( "mods" ) == nil then
 					self:SetData( "mods", {} )
 				end
 			end
-
-			ITEM.functions.Repair = {
-				name = "Repair",
-				tip = "equipTip",
-				icon = "icon16/bullet_wrench.png",
-				OnRun = function( item )
-					local client = item.player
-
-					local items = client:GetCharacter():GetInventory()
-					local itm = items:HasItem( "weptools" )
-					
-					if itm then
-						if item:GetData( "durability" ) < 100 then
-							itm:Remove()
-							client:EmitSound("volmos/mzone/interface/inv_restorearm.ogg", 80)
-							client:Notify( 'You repaired "' .. item.name .. '" using "' .. itm.name .. '"' )
-							item:SetData( "durability", math.Clamp( item:GetData( "durability" ) + 10, 1, 100 ) )
-						else
-							client:Notify("For this type of repair, less than 100% of the condition of the armor is required")
-						end
-					else
-						client:Notify("You do not have consumables for repair")
-					end		
-					
-					return false
-				end,
-				OnCanRun = function(item)
-					local client = item.player
-
-					return !IsValid(item.entity) and IsValid(client) and item:GetData("equip") == true and
-						hook.Run("CanPlayerUnequipItem", client, item) != false and item.invID == client:GetCharacter():GetInventory():GetID() and ( not client.ixRagdoll or not client.ixRagdoll:IsValid() )
-				end
-			}
-
+			
 			ITEM.functions.detach = {
 				name = "Dequip",
 				tip = "useTip",
