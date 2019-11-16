@@ -11,7 +11,7 @@ IX CW Support - ported from NS CW Support plugin.
 This plugin also using Russian language, but you can easily translate to English, by using [original plugin](https://github.com/rebel1324/BlackTea-Nutscript-Plugins/tree/master/cwsupport).  
 Holstering is working not properly!!!
 
-TFA Support - written by me plugin that add full support for TFA weapons pack.
-\n"sh_tfa_ammo.lua" - Here you can add ammo ( and new ammo types ).
-"sh_tfa_weps.lua" - Here you can edit weapon stats.
-"sh_tfa_attach.lua" - Here you can add attachments.
+TFA Support - written by me plugin that add full support for TFA weapons pack.  
+"sh_tfa_ammo.lua" - Here you can add ammo ( and new ammo types ).  
+"sh_tfa_weps.lua" - Here you can edit weapon stats.  
+"sh_tfa_attach.lua" - Here you can add attachments.  
