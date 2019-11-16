@@ -12,6 +12,9 @@ This plugin also using Russian language, but you can easily translate to English
 Holstering is working not properly!!!
 
 TFA Support - written by me plugin that add full support for TFA weapons pack.  
+Generates items, add ability to use attachments in inventory like items (equip to weapons), auto change and registering ammo and ammo types.  
+Also show in description of weapon what attachments are u using, ammo type and magazine capacity.  
+  
 "sh_tfa_ammo.lua" - Here you can add ammo ( and new ammo types ).  
 "sh_tfa_weps.lua" - Here you can edit weapon stats.  
 "sh_tfa_attach.lua" - Here you can add attachments.  
