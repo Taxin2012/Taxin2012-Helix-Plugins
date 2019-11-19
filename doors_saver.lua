@@ -52,6 +52,10 @@ if SERVER then
 		}
 		self:SetData( data )
 	end
+	
+	function PLUGIN:SaveData()
+		self:SaveDoors()	
+	end
 
 	function PLUGIN:OnPlayerPurchaseDoor( ply, ent, isBuy )
 		local char = ply:GetCharacter()
