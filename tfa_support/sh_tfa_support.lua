@@ -110,6 +110,10 @@ function PLUGIN:InitializedPlugins()
 			ITEM.class = class
 			ITEM.IsTFA = true
 			ITEM.DoEquipSnd = true
+			
+			if dat.iconCam then
+				ITEM.iconCam = dat.iconCam
+			end
 
 			local atts = {}
 			if v.Attachments then
@@ -245,6 +249,9 @@ function PLUGIN:InitializedPlugins()
 		ITEM.name = v.Name
 		ITEM.price = v.Price or 300
 		ITEM.model = v.Model or "models/Items/BoxSRounds.mdl"
+		if v.iconCam then
+			ITEM.iconCam = v.iconCam
+		end
 		ITEM.width = v.Width or 1
 		ITEM.height = v.Height or 1
 		ITEM.isAttachment = true
@@ -330,6 +337,9 @@ function PLUGIN:InitializedPlugins()
 		ITEM.ammoAmount = v.Amount or 30
 		ITEM.price = v.Price or 200
 		ITEM.model = v.Model or "models/Items/BoxSRounds.mdl"
+		if v.iconCam then
+			ITEM.iconCam = v.iconCam
+		end
 		ITEM.width = v.Width or 1
 		ITEM.height = v.Height or 1
 		ITEM.isAmmo = true
