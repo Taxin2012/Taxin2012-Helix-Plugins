@@ -39,6 +39,11 @@ PLUGIN.AttachData[ "ins2_si_kobra" ] = {
 	Desc = "Sight for weapons",
 	Price = 2000,
 	Model = "models/Items/BoxSRounds.mdl",
+	iconCam = {
+		tpos = Vector( 0, 0, 0 ),
+		tang = Angle( 0, 0, 0 ),
+		tfov = 0
+	},
 	Width = 1,
 	Height = 1,
 	Slot = 2
