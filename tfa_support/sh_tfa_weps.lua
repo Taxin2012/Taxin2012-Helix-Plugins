@@ -24,6 +24,7 @@
 
 PLUGIN.GunData[ "tfa_ins2_ak74m" ] = {
 	Slot = "primary",
+	Model = "path_to_model_of_item",
 	Width = 4,
 	Height = 2,
 	Weight = 3,
