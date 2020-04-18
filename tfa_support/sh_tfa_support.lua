@@ -135,7 +135,7 @@ function PLUGIN:InitializedPlugins()
 				item.player:EmitSound( "volmos/mzone/interface/inv_drop.ogg" ) 
 			end )
 
-			ITEM.model = v.WorldModel
+			ITEM.model = dat.Model or v.WorldModel
 
 			ITEM.width = dat.Width or 1
 			ITEM.height = dat.Height or 1
