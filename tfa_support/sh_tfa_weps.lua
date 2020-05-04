@@ -45,8 +45,11 @@ PLUGIN.GunData[ "tfa_ins2_ak74m" ] = {
 		KickHorizontal = 0.35,
 		Spread = .021,
 		IronAccuracy = .01
-	}
+	},
 	
 	--Sec == Secondary
-	Sec = {}
+	Sec = {},
+	
+	--Weapon can be Blacklisted and item will be not auto-generated
+	BlackList = false
 }
