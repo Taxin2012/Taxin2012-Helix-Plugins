@@ -25,4 +25,7 @@ Before use, edit the sound on those lines:
   
 "sh_tfa_ammo.lua" - Here you can add ammo ( and new ammo types ).  
 "sh_tfa_weps.lua" - Here you can edit weapon parameters.  
-"sh_tfa_attach.lua" - Here you can add attachments.  
+"sh_tfa_attach.lua" - Here you can add attachments.
+
+You can select: auto-generate all weapons but blacklisted or auto-generate only that weapons that described in `sh_tfa_weps.lua` file.
+For that, just edit "PLUGIN.DoAutoCreation" option in "sh_tfa_support.lua" file.
