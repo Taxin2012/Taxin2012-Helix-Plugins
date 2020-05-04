@@ -68,23 +68,14 @@ end
 function PLUGIN:InitializedPlugins()
 	for k, v in next, weapons.GetList() do
 		local class = v.ClassName
-		local prefix = "tfa_"
+		local dat = self.GunData[ class ]
 
-		if class:find( prefix ) and not class:find( "base" ) then
-			if class:find( "tfa_ins2_" ) then 
-				prefix = "tfa_ins2_"
-			elseif class:find( "tfa_ayykyu_" ) then 
-				prefix = "tfa_ayykyu_"
-			elseif class:find( "tfa_fml_" ) then 
-				prefix = "tfa_fml_" 
-			end
-
+		if dat then
 			--v.MainBullet.Ricochet = function() return true end
 			v.HandleDoor = function() return end
 			v.Primary.DefaultClip = 0
  
-			local dat = self.GunData[ class ] or {}
-			local orig_wep = weapons.GetStored( v.ClassName )
+			local orig_wep = weapons.GetStored( class )
 
 			if dat.Prim and not table.IsEmpty( dat.Prim ) then
 				for k2, v2 in next, dat.Prim do
