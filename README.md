@@ -20,7 +20,7 @@ What that plugin does:
 4) Shows in description what attachments are have the weapon, ammo type and magazine capacity;  
 5) Allows to edit weapons parameters without editing the original weapon.
   
-Before use, edit the sound on those lines:
+Before use, edit the sound on those lines in "sh_tfa_support.lua" file:
 157, 251, 321, 369
   
 "sh_tfa_ammo.lua" - Here you can add ammo ( and new ammo types ).  
