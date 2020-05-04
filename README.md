@@ -21,7 +21,7 @@ What that plugin does:
 5) Allows to edit weapons parameters without editing the original weapon.
   
 Before use, edit the sound on those lines:
-135, 229, 297, 342
+157, 251, 321, 369
   
 "sh_tfa_ammo.lua" - Here you can add ammo ( and new ammo types ).  
 "sh_tfa_weps.lua" - Here you can edit weapon parameters.  
