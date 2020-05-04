@@ -32,8 +32,10 @@ If `true`:
 
 If `false`:
 	Auto-generate only that items that described in `sh_tfa_weps.lua` file
+
+*Black List works for both methods
 ]]
-PLUGIN.DoAutoCreation = false
+PLUGIN.DoAutoCreation = true
 
 
 
