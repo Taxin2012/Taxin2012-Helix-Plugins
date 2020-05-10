@@ -23,6 +23,7 @@
 
 
 PLUGIN.GunData[ "tfa_ins2_ak74m" ] = {
+	Desc = "Description",
 	Slot = "primary",
 	Model = "path_to_model_of_item",
 	iconCam = {
