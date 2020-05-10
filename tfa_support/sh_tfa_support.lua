@@ -1,6 +1,6 @@
 
 --
--- Copyright (C) 2019 Taxin2012
+-- Copyright (C) 2020 Taxin2012
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
@@ -23,21 +23,6 @@
 
 
 local PLUGIN = PLUGIN
-
---[[
-DoAutoCreation:
-
-If `true`:
-	Auto-generate items for all weapons with `tfa_` prefix
-
-If `false`:
-	Auto-generate only that items that described in `sh_tfa_weps.lua` file
-
-*Black List works for both methods
-]]
-PLUGIN.DoAutoCreation = true
-
-
 
 PLUGIN.GunData = {}
 ix.util.Include("sh_tfa_weps.lua")
@@ -154,7 +139,7 @@ function PLUGIN:InitializedPlugins()
 		end
 
 		ITEM:Hook( "drop", function( item )
-			item.player:EmitSound( "volmos/mzone/interface/inv_drop.ogg" ) 
+			item.player:EmitSound( "physics/metal/metal_box_footstep1.wav" ) 
 		end )
 
 		ITEM.model = dat.Model or v.WorldModel
@@ -198,7 +183,7 @@ function PLUGIN:InitializedPlugins()
 		end
 
 		function ITEM:GetDescription()
-			local text = ""
+			local text = v.Desc or ""
 
 			if v.Primary.Ammo and v.Primary.ClipSize then
 				local ammo_itm = ix.item.list[ "ammo_" .. v.Primary.Ammo ]
@@ -248,7 +233,7 @@ function PLUGIN:InitializedPlugins()
 					mods[ data[1] ] = nil
 					item:SetData( "mods", mods )
 
-					item.player:EmitSound( "volmos/mzone/interface/inv_detach_addon.ogg" )
+					item.player:EmitSound( "weapons/crossbow/reload1.wav" )
 
 					local wep = item.player:GetWeapon( item.class )
 					if IsValid( wep ) then
@@ -264,6 +249,7 @@ function PLUGIN:InitializedPlugins()
 	for k, v in next, self.AttachData do
 		local ITEM = ix.item.Register( k, nil, nil, nil, true )
 		ITEM.name = v.Name
+		ITEM.description = v.Desc or ""
 		ITEM.price = v.Price or 300
 		ITEM.model = v.Model or "models/Items/BoxSRounds.mdl"
 		if v.iconCam then
@@ -274,10 +260,6 @@ function PLUGIN:InitializedPlugins()
 		ITEM.isAttachment = true
 		ITEM.category = "Attachments"
         ITEM.slot = v.Slot
-
-        function ITEM:GetDescription()
-			return v.Desc
-		end
 
 		ITEM.functions.use = {
 			name = "Equip",
@@ -318,7 +300,7 @@ function PLUGIN:InitializedPlugins()
 						mods[ item.slot ] = item.uniqueID
 						wep_itm:SetData( "mods", mods )
 
-						item.player:EmitSound( "volmos/mzone/interface/inv_detach_addon.ogg" )
+						item.player:EmitSound( "weapons/crossbow/reload1.wav" )
 
 						local wep = item.player:GetWeapon( wep_itm.class )
 						if IsValid( wep ) then
@@ -362,11 +344,11 @@ function PLUGIN:InitializedPlugins()
 		ITEM.isAmmo = true
 
 		function ITEM:GetDescription()
-			return "Haves " .. self.ammoAmount .. " ammo."
+			return ( v.Desc or "" ) .. "\n\nHaves " .. self.ammoAmount .. " ammo."
 		end
 
 		ITEM:Hook( "drop", function(item)
-			item.player:EmitSound( "volmos/mzone/interface/inv_drop.ogg", 80 ) 
+			item.player:EmitSound( "physics/metal/metal_box_footstep1.wav" ) 
 		end )
 	end
 end
