@@ -54,3 +54,8 @@ PLUGIN.GunData[ "tfa_ins2_ak74m" ] = {
 	--Weapon can be Blacklisted and item will be not auto-generated
 	BlackList = false
 }
+
+--Only "Slot" field is required:
+PLUGIN.GunData[ "another_tfa_weapon" ] = {
+	Slot = "secondary"
+}
