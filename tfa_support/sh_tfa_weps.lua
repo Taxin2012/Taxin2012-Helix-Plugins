@@ -22,7 +22,26 @@
 
 
 
+--[[
+Required Fields:
+Slot - string (Can be anything)
+
+Not required Fields:
+Name - string, default: A weapon name
+Desc - string, default: ""
+Model - string, default: A weapon world model
+iconCam - table, default: nil
+Width - number, default: 1
+Height - number, default: 1
+Weight - number, default: nil (Helix don't have a weight system by default)
+Price - number, default: 300
+Prim - table, default: nil
+Sec - table, default: nil
+BlackList - bool, default: nil
+]]--
+
 PLUGIN.GunData[ "tfa_ins2_ak74m" ] = {
+	Name = "AK74M"
 	Desc = "Description",
 	Slot = "primary",
 	Model = "path_to_model_of_item",
