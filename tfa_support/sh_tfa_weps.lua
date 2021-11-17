@@ -41,7 +41,7 @@ BlackList - bool, default: nil
 ]]--
 
 PLUGIN.GunData[ "tfa_ins2_ak74m" ] = {
-	Name = "AK74M"
+	Name = "AK74M",
 	Desc = "Description",
 	Slot = "primary",
 	Model = "path_to_model_of_item",
