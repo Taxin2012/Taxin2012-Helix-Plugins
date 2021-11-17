@@ -237,7 +237,7 @@ function PLUGIN:InitializedPlugins()
 
 					local wep = item.player:GetWeapon( item.class )
 					if IsValid( wep ) then
-						wep:Detach( data[2] )
+						wep:Detach( data[2], true )
 					end
 				end
 
@@ -304,7 +304,7 @@ function PLUGIN:InitializedPlugins()
 
 						local wep = item.player:GetWeapon( wep_itm.class )
 						if IsValid( wep ) then
-							wep:Attach( item.uniqueID )
+							wep:Attach( item.uniqueID, true )
 						end
 
 						return true
