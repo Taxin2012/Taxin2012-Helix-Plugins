@@ -183,7 +183,7 @@ function PLUGIN:InitializedPlugins()
 		end
 
 		function ITEM:GetDescription()
-			local text = ( v.Desc and v.Desc .. "\n\n" ) or ""
+			local text = ( dat.Desc and dat.Desc .. "\n\n" ) or ""
 
 			if v.Primary.Ammo and v.Primary.ClipSize then
 				local ammo_itm = ix.item.list[ "ammo_" .. v.Primary.Ammo ]
