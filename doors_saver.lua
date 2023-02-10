@@ -114,7 +114,8 @@ if SERVER then
 									door.ixAccess[ k ] = v
 								end
 							end
-
+							
+							door.ixAccess = door.ixAccess or {}
 							door.ixAccess[ ply ] = DOOR_OWNER
 						end
 					else
