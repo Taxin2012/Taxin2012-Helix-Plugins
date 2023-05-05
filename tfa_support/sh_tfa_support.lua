@@ -17,12 +17,14 @@
 
 
 
---	Writed by Taxin2012
+--	Written by Taxin2012
 --	https://steamcommunity.com/id/Taxin2012/
 
 
 
 local PLUGIN = PLUGIN
+
+if TFA == nil then return end
 
 PLUGIN.GunData = {}
 ix.util.Include("sh_tfa_weps.lua")
@@ -65,16 +67,146 @@ if CLIENT then
 	end
 end
 
+function PLUGIN:AssignItemBase(item, wepArr, wepData)
+	wepArr = wepArr or weapons.GetStored(item.class)
+	if wepArr == nil then return end
+
+	item.IsTFA = true
+
+	--wepArr.MainBullet.Ricochet = function() return true end
+	wepArr.HandleDoor = function() return end
+	wepArr.Primary.DefaultClip = 0
+	wepArr.ixTFASupport = true
+
+	local atts = {}
+
+	if wepArr.Attachments then
+		for k, v in next, wepArr.Attachments do
+			if v.atts ~= nil then
+				for k2, v2 in next, v.atts do
+					table.Merge( atts, { [ v2 ] = true } )
+				end
+			end
+		end
+	end
+
+	item.Attachments = atts
+
+	function item:OnEquipWeapon( ply, wep )
+		local data = self:GetData( "mods", {} )
+
+		if not table.IsEmpty( data ) then
+			timer.Simple( 0.2, function()
+				if IsValid( wep ) then
+					for k, v in next, data do
+						if self.Attachments[ v ] then
+							wep:Attach( v )
+						end
+					end
+				end
+			end )
+		end
+	end
+
+	if CLIENT then
+		function item:PaintOver(item, w, h)
+			local x, y = w - 14, h - 14
+
+			if item:GetData( "equip" ) then
+				surface.SetDrawColor( 110, 255, 110, 100 )
+				surface.DrawRect( x, y, 8, 8 )
+
+				x = x - 8 * 1.6
+			end
+
+			if not table.IsEmpty( item:GetData( "mods", {} ) ) then
+				surface.SetDrawColor( 255, 255, 110, 100 )
+				surface.DrawRect( x, y, 8, 8 )
+
+				x = x - 8 * 1.6
+			end
+		end
+
+		function item:GetDescription()
+			local text = ( wepData ~= nil and wepData.Desc ~= nil and wepData.Desc .. "\n\n" ) or ""
+
+			local ammo, clipSize = wepArr.Primary.Ammo, wepArr.Primary.ClipSize
+
+			if ammo ~= nil and clipSize ~= nil then
+				local ammo_itm = ix.item.list[ "ammo_" .. ammo ]
+				text = text .. "Using ammo: " .. ( ( ammo_itm and ammo_itm.name ) or ammo ) .. ".\nMagazine capacity: " .. clipSize .. "."
+			end
+
+			return text
+		end
+	end
+
+	function item:OnInstanced()
+		if self:GetData( "mods" ) == nil then
+			self:SetData( "mods", {} )
+		end
+	end
+	
+	item.functions.detach = {
+		name = "Dequip",
+		tip = "useTip",
+		icon = "icon16/wrench.png",
+        isMulti = true,
+        multiOptions = function( item, client )
+            local targets = {}
+
+            for k, v in next, item:GetData( "mods", {} ) do
+                table.insert( targets, {
+                    name = ( ix.item.list[ v ] and ix.item.list[ v ].name ) or v,
+                    data = { k, v },
+                } )
+            end
+
+            return targets
+        end,
+		OnCanRun = function( item )			
+            return not IsValid( item.entity ) and IsValid( item.player ) and item.invID == item.player:GetCharacter():GetInventory():GetID() and not table.IsEmpty( item:GetData( "mods", {} ) )
+		end,
+		OnRun = function( item, data )
+			if data and data[1] and data[2] then
+				local mods = item:GetData( "mods", {} )
+				if not mods[ data[1] ] then return false end
+
+				local x, y, id = item.player:GetCharacter():GetInventory():Add( data[2] )
+				if not id then
+					item.player:NotifyLocalized( "noFit" )
+					return false
+				end
+
+				mods[ data[1] ] = nil
+				item:SetData( "mods", mods )
+
+				item.player:EmitSound( "weapons/crossbow/reload1.wav" )
+
+				local wep = item.player:GetWeapon( item.class )
+				if IsValid( wep ) then
+					wep:Detach( data[2], true )
+				end
+			end
+
+			return false
+		end,
+	}
+end
+
 function PLUGIN:InitializedPlugins()
+	for k, v in next, ix.item.list do
+		if v.useTFASupport ~= nil then
+			self:AssignItemBase(v)
+		end
+	end
+
 	for k, v in next, weapons.GetList() do
 		local class = v.ClassName
 		local dat = self.GunData[ class ]
 		
-		
 		if dat then
-			if dat.BlackList then
-				continue
-			end
+			if dat.BlackList then continue end
 		else
 			if self.DoAutoCreation and ( class:find( "tfa_" ) or class:find( "sw_" ) ) and not class:find( "base" ) then
 				dat = {}
@@ -83,11 +215,8 @@ function PLUGIN:InitializedPlugins()
 			end
 		end
 
-		--v.MainBullet.Ricochet = function() return true end
-		v.HandleDoor = function() return end
-		v.Primary.DefaultClip = 0
-
 		local orig_wep = weapons.GetStored( class )
+		if orig_wep.ixTFASupport ~= nil then continue end
 
 		if dat.Prim and not table.IsEmpty( dat.Prim ) then
 			for k2, v2 in next, dat.Prim do
@@ -111,24 +240,13 @@ function PLUGIN:InitializedPlugins()
 		ITEM.price = dat.Price or 4000
 		ITEM.exRender = dat.exRender or false
 		ITEM.class = class
-		ITEM.IsTFA = true
 		ITEM.DoEquipSnd = true
 		
 		if dat.iconCam then
 			ITEM.iconCam = dat.iconCam
 		end
 
-		local atts = {}
-		if v.Attachments then
-			for k, v in next, v.Attachments do
-				if v.atts then
-					for k2, v2 in next, v.atts do
-						table.Merge( atts, { [ v2 ] = true } )
-					end
-				end
-			end
-		end
-		ITEM.Attachments = atts
+		self:AssignItemBase(ITEM, orig_wep, dat)
 
 		if dat.Weight then
 			ITEM.Weight = dat.Weight
@@ -147,103 +265,6 @@ function PLUGIN:InitializedPlugins()
 		ITEM.width = dat.Width or 1
 		ITEM.height = dat.Height or 1
 		ITEM.weaponCategory = dat.Slot or "primary"
-
-		function ITEM:OnEquipWeapon( ply, wep )
-			local data = self:GetData( "mods", {} )
-
-			if not table.IsEmpty( data ) then
-				timer.Simple( 0.2, function()
-					if IsValid( wep ) then
-						for k, v in next, data do
-							if self.Attachments[ v ] then
-								wep:Attach( v )
-							end
-						end
-					end
-				end )
-			end
-		end
-
-		function ITEM:PaintOver(item, w, h)
-			local x, y = w - 14, h - 14
-
-			if item:GetData( "equip" ) then
-				surface.SetDrawColor( 110, 255, 110, 100 )
-				surface.DrawRect( x, y, 8, 8 )
-
-				x = x - 8 * 1.6
-			end
-
-			if not table.IsEmpty( item:GetData( "mods", {} ) ) then
-				surface.SetDrawColor( 255, 255, 110, 100 )
-				surface.DrawRect( x, y, 8, 8 )
-
-				x = x - 8 * 1.6
-			end
-		end
-
-		function ITEM:GetDescription()
-			local text = ( dat.Desc and dat.Desc .. "\n\n" ) or ""
-
-			if v.Primary.Ammo and v.Primary.ClipSize then
-				local ammo_itm = ix.item.list[ "ammo_" .. v.Primary.Ammo ]
-				text = text .. "Using ammo: " .. ( ( ammo_itm and ammo_itm.name ) or v.Primary.Ammo ) .. ".\nMagazine capacity: " .. v.Primary.ClipSize .. "."
-			end
-
-			return text
-		end
-
-		function ITEM:OnInstanced()
-			if self:GetData( "mods" ) == nil then
-				self:SetData( "mods", {} )
-			end
-		end
-		
-		ITEM.functions.detach = {
-			name = "Dequip",
-			tip = "useTip",
-			icon = "icon16/wrench.png",
-            isMulti = true,
-            multiOptions = function( item, client )
-                local targets = {}
-
-                for k, v in next, item:GetData( "mods", {} ) do
-                    table.insert( targets, {
-                        name = ( ix.item.list[ v ] and ix.item.list[ v ].name ) or v,
-                        data = { k, v },
-                    } )
-                end
-
-                return targets
-            end,
-			OnCanRun = function( item )			
-                return not IsValid( item.entity ) and IsValid( item.player ) and item.invID == item.player:GetCharacter():GetInventory():GetID() and not table.IsEmpty( item:GetData( "mods", {} ) )
-			end,
-			OnRun = function( item, data )
-				if data and data[1] and data[2] then
-					local mods = item:GetData( "mods", {} )
-					if not mods[ data[1] ] then return false end
-
-					local x, y, id = item.player:GetCharacter():GetInventory():Add( data[2] )
-					if not id then
-						item.player:NotifyLocalized( "noFit" )
-						return false
-					end
-
-					mods[ data[1] ] = nil
-					item:SetData( "mods", mods )
-
-					item.player:EmitSound( "weapons/crossbow/reload1.wav" )
-
-					local wep = item.player:GetWeapon( item.class )
-					if IsValid( wep ) then
-						wep:Detach( data[2], true )
-					end
-				end
-
-				return false
-			end,
-		}
 	end
 
 	for k, v in next, self.AttachData do
