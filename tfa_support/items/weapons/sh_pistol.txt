@@ -7,3 +7,5 @@ ITEM.width = 2
 ITEM.height = 1
 
 ITEM.useTFASupport = true --Use TFA support plugin
+ITEM.TFAPrimaryMod = { Ammo = "pistol", Damage = 30, IronAccuracy = .005 } --Primary modifications of weapon parameters
+ITEM.TFASecondaryMod = {}  --Secondary modifications of weapon parameters
