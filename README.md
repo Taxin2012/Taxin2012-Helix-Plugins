@@ -19,6 +19,7 @@ What that plugin does:
 3) Automatically changes and registering ammo and ammo types;  
 4) Shows in description what attachments are have the weapon, ammo type and magazine capacity;  
 5) Allows to edit weapons parameters without editing the original weapon.
+6) individual weapon files in schema or any plugin can be used. (ITEM.useTFASupport = true)
   
 Before use, edit the sound on those lines in "sh_tfa_support.lua" file:  
 157, 251, 321, 369
