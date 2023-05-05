@@ -17,7 +17,7 @@
 
 
 
---	Written by Taxin2012
+--	Writed by Taxin2012
 --	https://steamcommunity.com/id/Taxin2012/
 
 
@@ -77,6 +77,24 @@ function PLUGIN:AssignItemBase(item, wepArr, wepData)
 	wepArr.HandleDoor = function() return end
 	wepArr.Primary.DefaultClip = 0
 	wepArr.ixTFASupport = true
+
+	local primaryMods, secondaryMods = (wepData ~= nil and wepData.Prim) or item.TFAPrimaryMod, (wepData ~= nil and wepData.Sec) or item.TFASecondaryMod
+
+	if primaryMods ~= nil and table.IsEmpty(primaryMods) == false then
+		for k, v in next, primaryMods do
+			if wepArr.Primary[ k ] ~= nil then
+				wepArr.Primary[ k ] = v
+			end
+		end
+	end
+
+	if secondaryMods ~= nil and table.IsEmpty(secondaryMods) == false then
+		for k, v in next, secondaryMods do
+			if wepArr.Secondary[ k ] ~= nil then
+				wepArr.Secondary[ k ] = v
+			end
+		end
+	end
 
 	local atts = {}
 
@@ -218,22 +236,6 @@ function PLUGIN:InitializedPlugins()
 		local orig_wep = weapons.GetStored( class )
 		if orig_wep.ixTFASupport ~= nil then continue end
 
-		if dat.Prim and not table.IsEmpty( dat.Prim ) then
-			for k2, v2 in next, dat.Prim do
-				if v.Primary[ k2 ] then
-					v.Primary[ k2 ] = v2
-				end
-			end
-		end
-
-		if dat.Sec and not table.IsEmpty( dat.Sec ) then
-			for k2, v2 in next, dat.Sec do
-				if v.Secondary[ k2 ] then
-					v.Secondary[ k2 ] = v2
-				end
-			end
-		end
-
 		local ITEM = ix.item.Register( class, "base_weapons", nil, nil, true )
 
 		ITEM.name = dat.Name or orig_wep.PrintName
@@ -241,12 +243,12 @@ function PLUGIN:InitializedPlugins()
 		ITEM.exRender = dat.exRender or false
 		ITEM.class = class
 		ITEM.DoEquipSnd = true
+
+		self:AssignItemBase(ITEM, orig_wep, dat)
 		
 		if dat.iconCam then
 			ITEM.iconCam = dat.iconCam
 		end
-
-		self:AssignItemBase(ITEM, orig_wep, dat)
 
 		if dat.Weight then
 			ITEM.Weight = dat.Weight
