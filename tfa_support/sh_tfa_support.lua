@@ -67,7 +67,7 @@ if CLIENT then
 	end
 end
 
-function PLUGIN:AssignItemBase(item, wepArr, wepData)
+function PLUGIN:AssignWeaponItemBase(item, wepArr, wepData)
 	wepArr = wepArr or weapons.GetStored(item.class)
 	if wepArr == nil then return end
 
@@ -146,7 +146,7 @@ function PLUGIN:AssignItemBase(item, wepArr, wepData)
 		end
 
 		function item:GetDescription()
-			local text = ( wepData ~= nil and wepData.Desc ~= nil and wepData.Desc .. "\n\n" ) or ""
+			local text = (wepData ~= nil and wepData.Desc ~= nil and wepData.Desc .. "\n\n") or (self.description ~= "" and self.description .. "\n\n") or ""
 
 			local ammo, clipSize = wepArr.Primary.Ammo, wepArr.Primary.ClipSize
 
@@ -212,10 +212,37 @@ function PLUGIN:AssignItemBase(item, wepArr, wepData)
 	}
 end
 
+function PLUGIN:AssignAmmoItemBase(item, description)
+	local ammoType = item.ammo
+
+	game.AddAmmoType( {
+	    name = ammoType,
+	    dmgtype = DMG_BULLET,
+	    tracer = TRACER_LINE,
+	    plydmg = 0,
+	    npcdmg = 0,
+	    force = 2000,
+	    minsplash = 10,
+	    maxsplash = 5
+	} )
+
+	ix.ammo.Register(ammoType)
+
+	if CLIENT then
+		function ITEM:GetDescription()
+			return (description or (self.description ~= "" and self.description) or "") .. "\n\nHaves " .. self.ammoAmount .. " ammo."
+		end
+	end
+end
+
 function PLUGIN:InitializedPlugins()
 	for k, v in next, ix.item.list do
 		if v.useTFASupport ~= nil then
-			self:AssignItemBase(v)
+			if v.base == "base_weapons" then
+				self:AssignWeaponItemBase(v)
+			elseif v.base == "base_ammo" then
+				self:AssignAmmoItemBase(v)
+			end
 		end
 	end
 
@@ -244,7 +271,7 @@ function PLUGIN:InitializedPlugins()
 		ITEM.class = class
 		ITEM.DoEquipSnd = true
 
-		self:AssignItemBase(ITEM, orig_wep, dat)
+		self:AssignWeaponItemBase(ITEM, orig_wep, dat)
 		
 		if dat.iconCam then
 			ITEM.iconCam = dat.iconCam
@@ -340,35 +367,22 @@ function PLUGIN:InitializedPlugins()
 	end
 
 	for k, v in next, self.AmmoData do
-		game.AddAmmoType( {
-		    name = k,
-		    dmgtype = DMG_BULLET,
-		    tracer = TRACER_LINE,
-		    plydmg = 0,
-		    npcdmg = 0,
-		    force = 2000,
-		    minsplash = 10,
-		    maxsplash = 5
-		} )
-
-		ix.ammo.Register( k )
-
 		local ITEM = ix.item.Register( "ammo_" .. k, "base_ammo", nil, nil, true )
 		ITEM.name = v.Name
 		ITEM.ammo = k
 		ITEM.ammoAmount = v.Amount or 30
 		ITEM.price = v.Price or 200
 		ITEM.model = v.Model or "models/Items/BoxSRounds.mdl"
+
 		if v.iconCam then
 			ITEM.iconCam = v.iconCam
 		end
+
 		ITEM.width = v.Width or 1
 		ITEM.height = v.Height or 1
 		ITEM.isAmmo = true
 
-		function ITEM:GetDescription()
-			return ( v.Desc or "" ) .. "\n\nHaves " .. self.ammoAmount .. " ammo."
-		end
+		self:AssignAmmoItemBase(ITEM, v.Desc)
 
 		ITEM:Hook( "drop", function(item)
 			item.player:EmitSound( "physics/metal/metal_box_footstep1.wav" ) 
