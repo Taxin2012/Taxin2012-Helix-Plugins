@@ -229,7 +229,7 @@ function PLUGIN:AssignAmmoItemBase(item, description)
 	ix.ammo.Register(ammoType)
 
 	if CLIENT then
-		function ITEM:GetDescription()
+		function item:GetDescription()
 			return (description or (self.description ~= "" and self.description) or "") .. "\n\nHaves " .. self.ammoAmount .. " ammo."
 		end
 	end
