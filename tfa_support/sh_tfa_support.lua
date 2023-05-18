@@ -145,14 +145,32 @@ function PLUGIN:AssignWeaponItemBase(item, wepArr, wepData)
 			end
 		end
 
+		local primaryAmmo = wepArr.Primary.Ammo
+
+		if primaryAmmo ~= nil then
+			local found = false
+
+			for k, v in next, ix.item.list do
+				if v.ammo == primaryAmmo then
+					item.tfaSupportAmmoName = v.name
+					found = true
+					break
+				end
+			end
+
+			if found == false then
+				local ammoItem = ix.item.list[ "ammo_" .. primaryAmmo ]
+				item.tfaSupportAmmoName = (ammoItem ~= nil and ammoItem.name) or primaryAmmo
+			end
+		end
+
 		function item:GetDescription()
 			local text = (wepData ~= nil and wepData.Desc ~= nil and wepData.Desc .. "\n\n") or (self.description ~= "" and self.description .. "\n\n") or ""
 
-			local ammo, clipSize = wepArr.Primary.Ammo, wepArr.Primary.ClipSize
+			local ammoName, clipSize = self.tfaSupportAmmoName, wepArr.Primary.ClipSize
 
-			if ammo ~= nil and clipSize ~= nil then
-				local ammo_itm = ix.item.list[ "ammo_" .. ammo ]
-				text = text .. "Using ammo: " .. ( ( ammo_itm and ammo_itm.name ) or ammo ) .. ".\nMagazine capacity: " .. clipSize .. "."
+			if ammoName ~= nil and clipSize ~= nil then
+				text = text .. "Using ammo: " .. ammoName .. ".\nMagazine capacity: " .. clipSize .. "."
 			end
 
 			return text
@@ -244,6 +262,29 @@ function PLUGIN:InitializedPlugins()
 				self:AssignAmmoItemBase(v)
 			end
 		end
+	end
+
+	for k, v in next, self.AmmoData do
+		local ITEM = ix.item.Register( "ammo_" .. k, "base_ammo", nil, nil, true )
+		ITEM.name = v.Name
+		ITEM.ammo = k
+		ITEM.ammoAmount = v.Amount or 30
+		ITEM.price = v.Price or 200
+		ITEM.model = v.Model or "models/Items/BoxSRounds.mdl"
+
+		if v.iconCam then
+			ITEM.iconCam = v.iconCam
+		end
+
+		ITEM.width = v.Width or 1
+		ITEM.height = v.Height or 1
+		ITEM.isAmmo = true
+
+		self:AssignAmmoItemBase(ITEM, v.Desc)
+
+		ITEM:Hook( "drop", function(item)
+			item.player:EmitSound( "physics/metal/metal_box_footstep1.wav" ) 
+		end )
 	end
 
 	for k, v in next, weapons.GetList() do
@@ -364,28 +405,5 @@ function PLUGIN:InitializedPlugins()
 				return false
 			end,
 		}
-	end
-
-	for k, v in next, self.AmmoData do
-		local ITEM = ix.item.Register( "ammo_" .. k, "base_ammo", nil, nil, true )
-		ITEM.name = v.Name
-		ITEM.ammo = k
-		ITEM.ammoAmount = v.Amount or 30
-		ITEM.price = v.Price or 200
-		ITEM.model = v.Model or "models/Items/BoxSRounds.mdl"
-
-		if v.iconCam then
-			ITEM.iconCam = v.iconCam
-		end
-
-		ITEM.width = v.Width or 1
-		ITEM.height = v.Height or 1
-		ITEM.isAmmo = true
-
-		self:AssignAmmoItemBase(ITEM, v.Desc)
-
-		ITEM:Hook( "drop", function(item)
-			item.player:EmitSound( "physics/metal/metal_box_footstep1.wav" ) 
-		end )
 	end
 end
